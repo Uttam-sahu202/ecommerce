@@ -26,7 +26,8 @@ const SearchPage = ({ successMessage, removeFromCart,addToCart, productInCart}) 
     };
 
 
-    const {searchedItem} = useParams();
+    const {searchedItem} = useParams();  // ritrive the clicked category name in home page 
+
     const [input, setInput] = useState("");
     const [productName, setProductName] = useState("");
     const [minPrice, setMinPrice] = useState(0);
@@ -127,7 +128,7 @@ const SearchPage = ({ successMessage, removeFromCart,addToCart, productInCart}) 
 };
 
 const mapStateToProps = (state) => ({
-    successMessage: state.homePageReducer.data,
+    successMessage: state.dataFetchedForHomePage.data,
     productInCart : state.cartReducer,
 });
 

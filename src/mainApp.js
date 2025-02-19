@@ -2,19 +2,11 @@ import DetailPage from "./components/DetailPage";
 import HomePage from './components/HomePage';
 import SearchPage from './components/SearchPage';
 import CartPage from "./components/CartPage.js"
-import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom"; 
 
-const  MainApp = () =>{
-    const [inputContent, setInputContent] = useState(""); 
+const  MainApp = () =>{             // inject the nomber of array you have in the cart and show this above cart 
     const navigate = useNavigate(); 
   
-    
-    const handleSearch = () => {
-        if (inputContent.trim()) { 
-            navigate(`/search/${inputContent.trim()}`);  
-        }
-    };
 
     const handleCartButton = () =>{
       navigate("/cart");
@@ -24,14 +16,12 @@ const  MainApp = () =>{
       <>
         
         <header className="inputSection">
-          <input
-            type="text"
-            value={inputContent}
-            onChange={(e) => setInputContent(e.target.value)}
-            placeholder="Search the category here ..."
-          />
-          <button onClick={handleSearch}>Search</button>
-          <div><button onClick={() => handleCartButton()}>Cart</button></div>
+          <div>
+          wellcome to ecommerce ...
+          </div>
+          <div>
+            <button onClick={() => handleCartButton()}>Cart</button>
+          </div>
         </header>
   
         

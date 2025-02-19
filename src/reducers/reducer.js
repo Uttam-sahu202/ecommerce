@@ -5,7 +5,7 @@ import { combineReducers } from "redux";
 
 const reducer = combineReducers({
     detailReducer: detailReducer,    // Handles state related to product details
-    homePageReducer: homePageReducer, // Handles state related to homepage data
+    dataFetchedForHomePage: homePageReducer, // Handles state related to homepage data
     cartReducer: cartReducer,
 });
 

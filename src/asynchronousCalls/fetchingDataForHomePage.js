@@ -15,11 +15,11 @@ const fetchingDataForHomePage = () => {
                 return;
             }
 
-                                                             // Fetching all category data categoryWise one by one 
+            // Fetching all category data categoryWise one by one 
             const categoryDataList = await Promise.all(
                 categories.map(async (category) => {
                     try {
-                        const res = await fetch(`http://localhost:3005/categories/${category}`);
+                        const res = await fetch(`http://localhost:3005/categories/${category}?limit=4`);
                         return await res.json();
                     } catch (err) {
                         console.error(`Error fetching data for ${category}:`, err);
@@ -35,14 +35,10 @@ const fetchingDataForHomePage = () => {
                 return;
             }
 
-            const finalData = validCategoryData.map((categoryData, index) => ({
-                categories: categories[index],
-                products: categoryData.products || [],
+            dispatch(successAction({
+                AllCategories: categories,
+                categoryWiseFourOrLessData: validCategoryData,
             }));
-
-            finalData.push({AllCategories : categories,});   // inserting all cotegories at the last index to reduce the serching time
-
-            dispatch(successAction(finalData));
         } catch (error) {
             console.error("Error during fetch:", error);
             dispatch(errorAction(error.message));
