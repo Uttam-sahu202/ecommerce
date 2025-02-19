@@ -30,10 +30,27 @@
 
 
 
-/* css for search page  */
+/* css for cart button  */
 
 
+.cart-button{
+  position : relative;
+}
 
+.cartValue {
+  position: absolute;
+  top: -8px;  
+  right: -8px; 
+  background-color: rgb(247, 63, 63);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px;
+  border-radius: 50%;
+  min-width: 20px;
+  min-height: 20px;
+  text-align: center;
+}
 
 
 
