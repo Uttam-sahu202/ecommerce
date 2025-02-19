@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams, useNavigate} from "react-router-dom";
+import fetchingDataForSearchPage from "../asynchronousCalls/fetchingDataForSearchPage";
 import addToCartAction from "../actions/addToCartAction";
 import removeFromTheCart from "../actions/removeFromTheCart";
 
 const SearchPage = ({ successMessage, removeFromCart,addToCart, productInCart}) => {
     
     const navigate = useNavigate();
+    const {searchedItem} = useParams();  // ritrive the clicked category name in home page 
+
+    useEffect(() => {
+        fetchingDataForSearchPage(searchedItem);   // at the time of mountaining only not for pagination 
+    }, [searchedItem]);
     
-    const handleCartButton = (e, product) => {
+    const handleCartButton = (e, product) => {   // handling cart button clicked 
         e.stopPropagation();
         console.log(product);
         if (e.target.textContent === "add cart") {
@@ -26,7 +32,8 @@ const SearchPage = ({ successMessage, removeFromCart,addToCart, productInCart}) 
     };
 
 
-    const {searchedItem} = useParams();  // ritrive the clicked category name in home page 
+
+
 
     const [input, setInput] = useState("");
     const [productName, setProductName] = useState("");
