@@ -1,4 +1,3 @@
-/* General Reset */
 * {
     margin: 0;
     padding: 0;
@@ -9,9 +8,10 @@
     width: 100%;
     padding: 20px;
     overflow: hidden;
+    /* do not show scroll bar for overflow content */
 }
 
-/* Category Row */
+
 .category-row {
     display: flex;
     justify-content: space-between;
@@ -19,7 +19,7 @@
     margin-bottom: 20px;
 }
 
-/* Individual Category */
+
 .category {
     width: 24%;
     background: #fff;
@@ -27,37 +27,34 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    /* iske under ka product-cart overflow ho sakta hai so use overflow hidden*/
     position: relative;
+    /* alwaysh stay in it's normal position */
 }
 
-/* Category Title */
+
 .category h3 {
     text-align: center;
     margin-bottom: 10px;
-    color: rgb(70, 70, 232);
+    color: blue;
 }
 
 .category h3:hover {
-     text-decoration: underline;
-     cursor: pointer;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-/* Product Slider (Scrollable) */
+
 .product-slider {
     display: flex;
     gap: 10px;
     overflow-x: auto;
     scroll-behavior: smooth;
-    white-space: nowrap;
     padding-bottom: 10px;
 }
 
-/* Hide Scrollbar */
-.product-slider::-webkit-scrollbar {
-    display: none;
-}
 
-/* Individual Product Card */
+
 .product-card {
     min-width: 100%;
     text-align: center;
@@ -75,16 +72,15 @@
 .product-card img {
     width: 150px;
     height: 150px;
-    object-fit: cover;
     border-radius: 4px;
 }
 
-/* Scroll Buttons */
+
 .scroll-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: #c8ece8;;
+    background: #c8ece8;
     color: rgb(255, 255, 255);
     border: none;
     cursor: pointer;
@@ -103,18 +99,5 @@
 }
 
 .scroll-btn:hover {
-    background: rgba(76, 63, 63, 0.8);
+    background: #a8b7b7;
 }
-
-/* Responsive Design */
-/* @media (max-width: 1024px) {
-    .category {
-        width: 48%;
-    }
-}
-
-@media (max-width: 768px) {
-    .category {
-        width: 100%;
-    }
-} */

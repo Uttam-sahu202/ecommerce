@@ -1,6 +1,6 @@
 const error = (error) => {
     return ({
-        type: "error",
+        type: "Searcherror",
         payload: error,
     });
 }

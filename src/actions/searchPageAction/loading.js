@@ -1,6 +1,6 @@
 const loading = () =>{
     return ({
-        type : "loading",
+        type : "Searchloading",
     })
 }
 

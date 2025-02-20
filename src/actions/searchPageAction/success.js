@@ -1,6 +1,6 @@
 const success = (data) =>{
     return ({
-        type : "success",
+        type : "Searchsuccess",
         payload : data,
     })
 }

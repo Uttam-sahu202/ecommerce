@@ -1,0 +1,125 @@
+.searched-content-perPage {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+
+.productDivInsideSearch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.productDivInsideSearch:hover {
+    transform: scale(1.03);
+}
+
+.searchedImage {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+.productDivInsideSearch h4,
+.productDivInsideSearch p {
+    margin: 5px 0;
+    text-align: center;
+}
+
+
+.productDivInsideSearch button {
+    padding: 8px 12px;
+    border: none;
+    background-color: pink;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.productDivInsideSearch button:hover {
+    background-color: rgb(163, 139, 143);
+}
+
+
+
+
+/* css of footer  */
+
+
+
+
+
+.vavigation-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.withButtons {
+    width: 100px;
+    display: flex;
+    align-items: center;
+}
+
+
+
+.footer-div {
+    width: 100px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    /* Enables horizontal scrolling */
+    scroll-behavior: smooth;
+    /* Smooth scrolling effect */
+    white-space: nowrap;
+    /* Ensures numbers remain in one line */
+}
+
+.footer-div::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar for Chrome, Safari, Edge */
+}
+
+/* Style for the page numbers */
+.pageNumber {
+    cursor: pointer;
+    color: rgb(34, 34, 235);
+}
+
+pageNumber:hover {
+    text-decoration: underline;
+    color: rgb(63, 63, 198);
+}
+
+.footer-div buttons {
+    position: absolute;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.footer-div button:hover {
+    background-color: #bbb;
+}
+
+.footer-div button:first-child {
+    left: -30px;
+}

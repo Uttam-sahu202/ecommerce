@@ -7,19 +7,19 @@ const initialState ={
 
 const searchPageReducer =(state = initialState, action) =>{
     switch (action.type) {
-        case "loading":
+        case "Searchloading":
             return {
                 ...state,
                 loading: true,
             };
-        case "success":
+        case "Searchsuccess":
             return {
                 ...state,
                 loading: false,
                 error: "",
                 data: action.payload,
             }
-        case "error":
+        case "Searcherror":
             return {
                 ...state,
                 loading: false,

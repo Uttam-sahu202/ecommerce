@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import fetchingDataForHomePage from "../asynchronousCalls/fetchingDataForHomePage.js";
@@ -7,15 +7,14 @@ import "../HomePage.css"; // Import the CSS
 const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
     const navigate = useNavigate();
     const sliderRefs = useRef({}); // Store refs for each category's product slider
-    const [scrollPosition, setScrollPosition] = useState({}); // Track scroll position for buttons
 
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
-   
 
-    const goToSearchPage = (e,categoryName) =>{
+
+    const goToSearchPage = (e, categoryName) => {
         e.stopPropagation();
         navigate(`/search/${categoryName}`);
     }
@@ -31,34 +30,23 @@ const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
 
 
     const groupedCategories = [];
-    const categoryEntries = Object.entries(categoryWiseProducts);
+    const categoryEntries = Object.entries(categoryWiseProducts);  // now we have an array of array like [ ["laptops",[products]],["grosory",[products]],...]
 
-    for (let i = 0; i < categoryEntries.length; i += 4) {
+    for (let i = 0; i < categoryEntries.length; i += 4) {      // now 1st index will contain 4 category with it's product array 
         groupedCategories.push(categoryEntries.slice(i, i + 4));
     }
 
 
-    const handleScroll = (categoryName) => {
-        const scrollContainer = sliderRefs.current[categoryName];
-        setScrollPosition((prev) => ({
-            ...prev,
-            [categoryName]: {
-                leftHidden: scrollContainer.scrollLeft <= 0,
-                rightHidden: scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth,
-            },
-        }));
-    };
-
     const handleScrollLeft = (categoryName) => {
-        if (sliderRefs.current[categoryName]) {
-            sliderRefs.current[categoryName].scrollBy({ left: -200, behavior: "smooth" });
-        }
+
+        sliderRefs.current[categoryName].scrollBy({ left: -200 });
+
     };
 
     const handleScrollRight = (categoryName) => {
-        if (sliderRefs.current[categoryName]) {
-            sliderRefs.current[categoryName].scrollBy({ left: 200, behavior: "smooth" });
-        }
+
+        sliderRefs.current[categoryName].scrollBy({ left: 200 });
+
     };
 
     if (loadingFlag) return <h1>Loading...</h1>;
@@ -66,16 +54,15 @@ const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
 
     return (
         <div className="home-container">
-            {groupedCategories.map((categoryRow, rowIndex) => (
+            {groupedCategories.map((categoryRow, rowIndex) => ( // categoryRow will have 3 index with category and product array in each index including zero  
                 <div key={rowIndex} className="category-row">
-                    {categoryRow.map(([categoryName, products], index) => (
+                    {categoryRow.map(([categoryName, products], index) => ( // ritriving each array which is like ["caterory",[products]]
                         <div key={index} className="category">
-                            <h3 onClick={(e)=>goToSearchPage(e,categoryName)} >{categoryName}</h3>
+                            <h3 onClick={(e) => goToSearchPage(e, categoryName)} >{categoryName}</h3>
                             <div
                                 className="product-slider"
-                                ref={(el) => {
-                                    sliderRefs.current[categoryName] = el;
-                                    if (el) el.addEventListener("scroll", () => handleScroll(categoryName));
+                                ref={(el) => {                             // it take variable and functon as well so passing function to it
+                                    sliderRefs.current[categoryName] = el;   // store {categoryName : <div productSlider>...</div>} like this 
                                 }}
                             >
                                 {products.map((product) => (
@@ -86,16 +73,16 @@ const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
                                     </div>
                                 ))}
                             </div>
-                            {!scrollPosition[categoryName]?.leftHidden && (
-                                <button className="scroll-btn left" onClick={() => handleScrollLeft(categoryName)}>
-                                    &#10094;
-                                </button>
-                            )}
-                            {!scrollPosition[categoryName]?.rightHidden && (
-                                <button className="scroll-btn right" onClick={() => handleScrollRight(categoryName)}>
-                                    &#10095;
-                                </button>
-                            )}
+
+                            <button className="scroll-btn left" onClick={() => handleScrollLeft(categoryName)}>
+                                &#10094;
+                            </button>
+
+
+                            <button className="scroll-btn right" onClick={() => handleScrollRight(categoryName)}>
+                                &#10095;
+                            </button>
+
                         </div>
                     ))}
                 </div>

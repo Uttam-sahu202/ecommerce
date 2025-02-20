@@ -1,10 +1,13 @@
 .inputSection {
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   background-color: greenyellow; 
   border-bottom: 2px solid #ddd;
+  z-index: 100;
 }
 
 .inputSection div {
@@ -237,4 +240,8 @@
   font-size: 22px;
   font-weight: bold;
 }
+
+
+/* search page css */
+
 
