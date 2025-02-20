@@ -3,6 +3,9 @@ import addToCartAction from "../actions/addToCartAction.js";
 import removeFromTheCart from "../actions/removeFromTheCart.js";
 import { useState, useEffect } from "react";
 
+
+// task to do is 
+
 const CartPage = ({ product, addToCart, removeFromCart }) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [itemCounts, setItemCounts] = useState({});

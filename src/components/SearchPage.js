@@ -7,7 +7,7 @@ import removeFromTheCart from "../actions/removeFromTheCart";
 import "../SearchPage.css";
 
 const SearchPage = ({
-    successMessage, removeFromCart, addToCart, productInCart, AllCategories, fetchData, error, Total
+    successMessage, removeFromCart, addToCart, productIdInCart, AllCategories, fetchData, error, Total
 }) => {
 
     const [input, setInput] = useState("");
@@ -31,7 +31,7 @@ const SearchPage = ({
     const handleCartButton = (e, product) => {
         e.stopPropagation();
         if (e.target.textContent === "add cart") {
-            addToCart(product);
+            addToCart(product.id);
             e.target.textContent = "added";
         } else {
             removeFromCart(product.id);
@@ -139,7 +139,9 @@ const SearchPage = ({
                             <h4>{product.title}</h4>
                             <p>Rating: {product.rating}</p>
                             <p>Price: ${product.price}</p>
-                            <button onClick={(e) => handleCartButton(e, product)}>add cart</button>
+                            <button onClick={(e) => handleCartButton(e, product)}>
+                            { productIdInCart.includes(product.id) ? "added" : "add cart" }
+                            </button>
                         </div>
                     ))
                 ) : (
@@ -171,7 +173,7 @@ const SearchPage = ({
 
 const mapStateToProps = (state) => ({
     AllCategories: state.dataFetchedForHomePage.data.AllCategories,
-    productInCart: state.cartReducer,
+    productIdInCart: state.cartReducer,
     successMessage: state.searchedData.data.products,
     error: state.searchedData.error,
     Total: state.searchedData.data.total,

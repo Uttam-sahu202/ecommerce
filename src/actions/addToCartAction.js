@@ -1,7 +1,7 @@
-const addToCartAction = (productDetail) =>{
+const addToCartAction = (productId) =>{
       return {
         type : "add",
-        product : productDetail,
+        idToAdd : productId,
       }
 }
 

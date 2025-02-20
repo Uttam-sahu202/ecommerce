@@ -5,12 +5,12 @@ const cartReducer = (state = initialState, action) =>{
         case "add":
             {
                 const temprary = [...state];
-                temprary.push(action.product);
+                temprary.push(action.idToAdd);
                 return temprary;
             }
         case "remove":
             {
-                const temprary = state.filter(curr =>(curr.id !== action.idToRemove));
+                const temprary = state.filter(curr =>(curr !== action.idToRemove));
                 return temprary;
             } 
         default:
