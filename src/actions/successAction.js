@@ -1,8 +1,15 @@
 const successAction = (data) => {
-    return ({
-        type: "success",
-        payload: data,
-    });
-}
+    if (typeof data === "object" && data !== null) {
+        return {
+            type: "SUCCESS",
+            payload: data,
+        };
+    } else {
+        return {
+            type: "ERROR",
+            payload: { message: "Invalid data received" },
+        };
+    }
+};
 
 export default successAction;

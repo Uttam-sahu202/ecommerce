@@ -6,9 +6,11 @@ import addToCartAction from "../actions/addToCartAction";
 import removeFromTheCart from "../actions/removeFromTheCart";
 import "../SearchPage.css";
 
-const SearchPage = ({
-    successMessage, removeFromCart, addToCart, productIdInCart, AllCategories, fetchData, error, Total
-}) => {
+const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories }) => {
+    const [loading, setLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     const [input, setInput] = useState("");
     const [minPrice, setMinPrice] = useState(0);
@@ -16,26 +18,35 @@ const SearchPage = ({
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
     const { searchedItem } = useParams();
-
-    // Ref for pagination scrolling effect
     const footerRef = useRef(null);
 
-    useEffect(() => {
-        fetchData(searchedItem, 1, minPrice, maxPrice, rating);
-    }, [searchedItem, fetchData]);
+    const fetchDataAsync = async (category = searchedItem, page = 1) => {
+        setLoading(true);
+        try {
+            const data = await fetchingDataForSearchPage(category, page, minPrice, maxPrice, rating);
+            setSuccessMessage(data.products || []);
+            setTotal(data.total);
+        } catch (error) {
+            setSuccessMessage([]);
+        }
+        setLoading(false);
+    };
 
-    const handleCategoryClick = (category, page = 1) => {
-        fetchData(category, page, minPrice, maxPrice, rating);
+    useEffect(() => {
+        fetchDataAsync(selectedCategory || searchedItem);
+    }, [selectedCategory, minPrice, maxPrice, rating]);
+
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+        navigate(`/search/${category}`);
     };
 
     const handleCartButton = (e, product) => {
         e.stopPropagation();
-        if (e.target.textContent === "add cart") {
-            addToCart(product.id);
-            e.target.textContent = "added";
-        } else {
+        if (productIdInCart.includes(product.id)) {
             removeFromCart(product.id);
-            e.target.textContent = "add cart";
+        } else {
+            addToCart(product.id);
         }
     };
 
@@ -44,11 +55,6 @@ const SearchPage = ({
         navigate(`/detail/${productId}`);
     };
 
-    const handleFilterSearch = () => {
-        fetchData(input, 1, minPrice, maxPrice, rating);
-    };
-
-    // Pagination scrolling effect
     const handleScroll = (direction) => {
         if (footerRef.current) {
             footerRef.current.scrollBy({
@@ -58,13 +64,10 @@ const SearchPage = ({
         }
     };
 
-    if (error) return <h2>{error}</h2>;
+    if (loading) return <h2>Loading...</h2>;
+    if (!successMessage.length) return <h1>No products found with the applied filters!</h1>;
 
-    if (!successMessage || successMessage.length === 0) {
-        return <h1>No products found with the applied filters!</h1>;
-    }
-
-    const filteredProducts = successMessage.filter((product) =>
+    const filteredProducts = successMessage.filter(product =>
         product.price >= minPrice && product.price <= maxPrice && product.rating >= rating
     );
 
@@ -79,9 +82,8 @@ const SearchPage = ({
                             placeholder="Search categories..."
                             onChange={(e) => setInput(e.target.value)}
                         />
-                        <button onClick={handleFilterSearch}>Search</button>
+                        <button onClick={()=>handleCategoryClick(input)} >search</button>
                     </div>
-
                     <div className="price-range">
                         <div className="min-price">Set Price
                             <select onChange={(e) => setMinPrice(Number(e.target.value))}>
@@ -105,7 +107,6 @@ const SearchPage = ({
                             </select>
                         </div>
                     </div>
-
                     <div className="rating-range">Set Rating
                         <select onChange={(e) => setRating(Number(e.target.value))}>
                             <option value={0}>All Ratings</option>
@@ -116,7 +117,6 @@ const SearchPage = ({
                         </select>
                     </div>
                 </div>
-
                 <div className="category-buttons">
                     {AllCategories?.length > 0 ? (
                         AllCategories.map((category, index) => (
@@ -130,37 +130,31 @@ const SearchPage = ({
                 </div>
             </section>
 
-            {/* Products Section */}
             <section className="searched-content-perPage">
-                {filteredProducts.length > 0 ? (
-                    filteredProducts.map((product) => (
-                        <div key={product.id} onClick={(e) => handlingProductCardClick(e, product.id)} className="productDivInsideSearch">
-                            <img src={product.thumbnail} alt={product.title} className="searchedImage" />
-                            <h4>{product.title}</h4>
-                            <p>Rating: {product.rating}</p>
-                            <p>Price: ${product.price}</p>
-                            <button onClick={(e) => handleCartButton(e, product)}>
-                            { productIdInCart.includes(product.id) ? "added" : "add cart" }
-                            </button>
-                        </div>
-                    ))
-                ) : (
-                    <h2>No products match your search criteria.</h2>
-                )}
+                {filteredProducts.map((product) => (
+                    <div key={product.id} onClick={(e) => handlingProductCardClick(e, product.id)} className="productDivInsideSearch">
+                        <img src={product.thumbnail} alt={product.title} className="searchedImage" />
+                        <h4>{product.title}</h4>
+                        <p>Rating: {product.rating}</p>
+                        <p>Price: ${product.price}</p>
+                        <button onClick={(e) => handleCartButton(e, product)}>
+                            {productIdInCart.includes(product.id) ? "Added" : "Add to Cart"}
+                        </button>
+                    </div>
+                ))}
             </section>
 
-            {/* Pagination Footer with Scroll Effect */}
             <footer className="vavigation-footer">
                 <div className="withButtons">
                     <button onClick={() => handleScroll("left")}>&#10094;</button>
                     <div className="footer-div" ref={footerRef}>
-                        {[...Array(Math.ceil(Total / 10))].map((_, index) => (
+                        {[...Array(Math.ceil(total / 10))].map((_, index) => (
                             <div
                                 key={index}
-                                onClick={() => handleCategoryClick(searchedItem, index + 1)}
+                                onClick={() => fetchDataAsync(selectedCategory || searchedItem, index + 1)}
                                 className="pageNumber"
                             >
-                                {index + 1}/{Math.ceil(Total / 10)}
+                                {index + 1}/{Math.ceil(total / 10)}
                             </div>
                         ))}
                     </div>
@@ -172,18 +166,13 @@ const SearchPage = ({
 };
 
 const mapStateToProps = (state) => ({
-    AllCategories: state.dataFetchedForHomePage.data.AllCategories,
+    AllCategories: state.homePageReducer.categories,
     productIdInCart: state.cartReducer,
-    successMessage: state.searchedData.data.products,
-    error: state.searchedData.error,
-    Total: state.searchedData.data.total,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     addToCart: (productInformation) => dispatch(addToCartAction(productInformation)),
     removeFromCart: (id) => dispatch(removeFromTheCart(id)),
-    fetchData: (searchedItem, page = 1, minPrice, maxPrice, rating) =>
-        dispatch(fetchingDataForSearchPage(searchedItem, page, minPrice, maxPrice, rating)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

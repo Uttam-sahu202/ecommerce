@@ -1,24 +1,18 @@
-import loadingForDetailPage from "../actions/loadingForDetailPage";
-import successForDetailPage from "../actions/successForDetailPage";
-import errorForDetailPage from "../actions/errorForDetailPage";
+async function fetchingDataForDetailPage(productId) {
+    try {
+        const response = await fetch(`http://localhost:3005/products/${productId}`);
 
-const fetchingDataForDetailPage = (productId) =>{
-    return async (dispatch) => {
-        dispatch(loadingForDetailPage());
-
-        try {
-            const response = await fetch(`http://localhost:3005/products/${productId}d`);
-            const data = await response.json();
-
-            if(data)
-            dispatch(successForDetailPage(data));
-
-            if(!data)
-                dispatch(errorForDetailPage(`can't get the data for product id : ${productId}`));
-        } catch (error) {
-            dispatch(errorForDetailPage(`try catch error :- can't get the data for product id : ${productId}`));
+        if (!response.ok) {
+            throw new Error("Failed to fetch product data");
         }
-    };
+
+        const data = await response.json();
+
+        return data || "Couldn't get the data for product";
+
+    } catch (error) {
+        return "Can't get the data for product";
+    }
 }
 
 export default fetchingDataForDetailPage;

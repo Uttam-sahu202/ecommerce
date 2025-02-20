@@ -1,34 +1,26 @@
 const initialState = {
-    loading: false,
-    data: [],
-    error: "",
-}
-
+    products: [],
+    categories: [],
+};
 
 const homePageReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "loading":
+        case "SUCCESS": {
             return {
                 ...state,
-                loading: true,
+                products: action.payload.products || [],
+                categories: action.payload.AllCategories || [], 
             };
-        case "success":
+        }
+        case "ERROR":{
+            alert("error happend in fetching retry");
             return {
                 ...state,
-                loading: false,
-                error: "",
-                data: action.payload,
-            }
-        case "error":
-            return {
-                ...state,
-                loading: false,
-                data: [],
-                error: action.payload,
-            }
+            };
+        }
         default:
             return state;
     }
-}
+};
 
 export default homePageReducer;

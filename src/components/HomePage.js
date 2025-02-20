@@ -1,14 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import fetchingDataForHomePage from "../asynchronousCalls/fetchingDataForHomePage.js";
 import "../HomePage.css"; // Import the CSS
 
-const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
+const HomePage = ({ fetchData,products,categories }) => {
     const navigate = useNavigate();
     const sliderRefs = useRef({}); // Store refs for each category's product slider
 
+    const [isLoading,setIsLoading] = useState(false);
+
+    //console.log("hi from " ,success);
+
     useEffect(() => {
+        setIsLoading(true);
         fetchData();
     }, [fetchData]);
 
@@ -19,18 +24,17 @@ const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
         navigate(`/search/${categoryName}`);
     }
 
-    const categoryWiseProducts = (success?.categoryWiseFourOrLessData || []).reduce((acc, categoryData) => {  // maping product array category wise 
-        if (categoryData?.products?.length > 0) {
-            const categoryName = categoryData.products[0].category;
-            acc[categoryName] = categoryData.products;
-        }
-        return acc;
-    }, {});
+    const categoryEntries = Object.entries(
+        Object.values(products).reduce((acc, product) => {
+          if (!acc[product.category]) {
+            acc[product.category] = [];
+          }
+          acc[product.category].push(product);
+          return acc;
+        }, {})
+      );
 
-
-
-    const groupedCategories = [];
-    const categoryEntries = Object.entries(categoryWiseProducts);  // now we have an array of array like [ ["laptops",[products]],["grosory",[products]],...]
+     const groupedCategories = [];
 
     for (let i = 0; i < categoryEntries.length; i += 4) {      // now 1st index will contain 4 category with it's product array 
         groupedCategories.push(categoryEntries.slice(i, i + 4));
@@ -49,8 +53,8 @@ const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
 
     };
 
-    if (loadingFlag) return <h1>Loading...</h1>;
-    if (errorMessage) return <h1>{errorMessage}</h1>;
+    if (isLoading && categories === undefined) return <h1>Loading...</h1>;
+    if (typeof(categories) !== "object") return <h1>{categories}</h1>;
 
     return (
         <div className="home-container">
@@ -92,9 +96,8 @@ const HomePage = ({ loadingFlag, success, errorMessage, fetchData }) => {
 };
 
 const mapStateToProps = (state) => ({
-    loadingFlag: state.dataFetchedForHomePage.loading,
-    success: state.dataFetchedForHomePage.data,
-    errorMessage: state.dataFetchedForHomePage.error,
+    products : state.homePageReducer.products,
+    categories : state.homePageReducer.categories,
 });
 
 const mapDispatchToProps = (dispatch) => ({

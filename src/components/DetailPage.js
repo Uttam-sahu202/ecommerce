@@ -1,21 +1,38 @@
 import { connect } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import fetchingDataForDetailPage from "../asynchronousCalls/fetchingDataForDetailPage.js";
 
-const DetailPage = ({ loadingFlag, successMessage, errorMessage, fetchData }) => {
+const DetailPage = ({ products}) => {
+    const [loading, setLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
     const { id } = useParams();
 
     useEffect(() => {
-        fetchData(id);
-    }, [id, fetchData]);
+        const fetchDataAsync = async () => {
+            if (products[id] === undefined) {
+                setLoading(true);
+                try {
+                    const data = await fetchingDataForDetailPage(id);
+                    setSuccessMessage(data);
+                } catch (error) {
+                    setSuccessMessage("Can't get the data for product");
+                }
+                setLoading(false);
+            } else {
+                setSuccessMessage(products[id]);
+            }
+        };
 
-    if (loadingFlag) {
+        fetchDataAsync();
+    }, [id, products]);
+
+    if (loading) {
         return <h1>Loading...</h1>;
     }
 
-    if (errorMessage) {
-        return <h1>{errorMessage}</h1>;
+    if (typeof successMessage !== "object") {
+        return <h1>{successMessage}</h1>;
     }
 
     return (
@@ -43,7 +60,7 @@ const DetailPage = ({ loadingFlag, successMessage, errorMessage, fetchData }) =>
                 <p><strong>Minimum Order Quantity:</strong> {successMessage?.minimumOrderQuantity}</p>
             </div>
 
-           
+            {/* Customer Reviews */}
             <div className="reviews-section">
                 <h3>Customer Reviews</h3>
                 <div className="reviews">
@@ -66,13 +83,9 @@ const DetailPage = ({ loadingFlag, successMessage, errorMessage, fetchData }) =>
 };
 
 const mapStateToProps = (state) => ({
-    loadingFlag: state.detailReducer.loading,
-    successMessage: state.detailReducer.data,
-    errorMessage: state.detailReducer.error,
+    products: state.homePageReducer.products,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    fetchData: (id) => dispatch(fetchingDataForDetailPage(id)),
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailPage);
+
+export default connect(mapStateToProps)(DetailPage);
