@@ -1,3 +1,89 @@
+.filter-selector {
+    display: flex;
+    gap: 15px;
+    padding: 7px;
+    background-color: #f8f8f8;
+}
+
+.searchForCategories {
+    flex: 2;
+    /* Takes more space */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.searchForCategories input {
+    width: 100%;
+    /* Full width */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.searchForCategories button {
+    padding: 5px 15px;
+    background-color: #5454f4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.searchForCategories button:hover {
+    background-color: #4d5a91;
+}
+
+.price-range,
+.rating-range {
+    flex: 1;
+    /* because serch section has flex 2 so better to keep it 1 to increse space for search bars*/
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+
+
+.category-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    padding: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.category-buttons button {
+    padding: 3px 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    white-space: nowrap;
+    /* insure that the long name should be also in one line */
+    border-radius: 5px;
+}
+
+.category-buttons button:hover {
+    background-color: #ddd;
+}
+
+
+
+
+
+
+/* content css start from here  */
+
 .searched-content-perPage {
     display: flex;
     flex-wrap: wrap;

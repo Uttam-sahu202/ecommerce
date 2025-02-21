@@ -4,13 +4,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import fetchingDataForSearchPage from "../asynchronousCalls/fetchingDataForSearchPage";
 import addToCartAction from "../actions/addToCartAction";
 import removeFromTheCart from "../actions/removeFromTheCart";
+import addToProductsFromHomePageAction from "../actions/addToProductsFromHomePageAction.js";
 import "../SearchPage.css";
 
-const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories }) => {
+const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories, addToProduct,productsInStore}) => {
+
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState([]);
     const [total, setTotal] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState("");
 
     const [input, setInput] = useState("");
     const [minPrice, setMinPrice] = useState(0);
@@ -33,13 +34,25 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories 
     };
 
     useEffect(() => {
-        fetchDataAsync(selectedCategory || searchedItem);
-    }, [selectedCategory, minPrice, maxPrice, rating]);
+        fetchDataAsync(searchedItem);
+    }, [searchedItem]);
 
     const handleCategoryClick = (category) => {
-        setSelectedCategory(category);
         navigate(`/search/${category}`);
     };
+    
+
+    console.log(successMessage);
+    if (successMessage.length > 0) {
+        successMessage.forEach(pro => {
+            if (!productsInStore[pro.id]) { // Check if product is already in store
+                addToProduct(pro); // Dispatch the action to add product
+            }
+        });
+    }
+    
+
+
 
     const handleCartButton = (e, product) => {
         e.stopPropagation();
@@ -63,6 +76,10 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories 
             });
         }
     };
+     
+
+
+
 
     if (loading) return <h2>Loading...</h2>;
     if (!successMessage.length) return <h1>No products found with the applied filters!</h1>;
@@ -85,7 +102,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories 
                         <button onClick={()=>handleCategoryClick(input)} >search</button>
                     </div>
                     <div className="price-range">
-                        <div className="min-price">Set Price
+                        <div className="min-price">{"Set Price "}
                             <select onChange={(e) => setMinPrice(Number(e.target.value))}>
                                 <option value={0}>Min</option>
                                 <option value={100}>100</option>
@@ -151,7 +168,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories 
                         {[...Array(Math.ceil(total / 10))].map((_, index) => (
                             <div
                                 key={index}
-                                onClick={() => fetchDataAsync(selectedCategory || searchedItem, index + 1)}
+                                onClick={() => fetchDataAsync( searchedItem, index + 1)}
                                 className="pageNumber"
                             >
                                 {index + 1}/{Math.ceil(total / 10)}
@@ -167,12 +184,14 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories 
 
 const mapStateToProps = (state) => ({
     AllCategories: state.homePageReducer.categories,
+    productsInStore : state.homePageReducer.products,
     productIdInCart: state.cartReducer,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     addToCart: (productInformation) => dispatch(addToCartAction(productInformation)),
     removeFromCart: (id) => dispatch(removeFromTheCart(id)),
+    addToProduct : (product) => dispatch(addToProductsFromHomePageAction(product))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);
