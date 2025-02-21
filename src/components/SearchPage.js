@@ -24,7 +24,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
     const fetchDataAsync = async (category = searchedItem, page = 1) => {
         setLoading(true);
         try {
-            const data = await fetchingDataForSearchPage(category, page, minPrice, maxPrice, rating);
+            const data = await fetchingDataForSearchPage(category, page);
             setSuccessMessage(data.products || []);
             setTotal(data.total);
         } catch (error) {
@@ -104,7 +104,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                     </div>
                     <div className="price-range">
                         <div className="min-price">{"Set Price "}
-                            <select onChange={(e) => setMinPrice(Number(e.target.value))}>
+                            <select value={minPrice} onChange={(e) => setMinPrice(Number(e.target.value))}>
                                 <option value={0}>Min</option>
                                 <option value={100}>100</option>
                                 <option value={200}>200</option>
@@ -114,7 +114,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                                 <option value={10000}>10000</option>
                             </select>
                             <span> to </span>
-                            <select onChange={(e) => setMaxPrice(Number(e.target.value))}>
+                            <select value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))}>
                                 <option value={10000000000}>Max</option>
                                 <option value={1000}>1000</option>
                                 <option value={2000}>2000</option>
@@ -126,7 +126,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                         </div>
                     </div>
                     <div className="rating-range">Set Rating
-                        <select onChange={(e) => setRating(Number(e.target.value))}>
+                        <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
                             <option value={0}>All Ratings</option>
                             <option value={4}>4 & above</option>
                             <option value={3}>3 & above</option>
