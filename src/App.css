@@ -46,12 +46,10 @@
   right: -8px; 
   background-color: rgb(247, 63, 63);
   color: white;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: bold;
-  padding: 3px;
   border-radius: 50%;
   min-width: 20px;
-  min-height: 20px;
   text-align: center;
 }
 

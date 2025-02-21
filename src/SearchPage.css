@@ -124,7 +124,7 @@ select {
 }
 
 
-.productDivInsideSearch button {
+.cartButton{
     padding: 8px 12px;
     border: none;
     background-color: pink;

@@ -155,7 +155,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                         <h4>{product.title}</h4>
                         <p>Rating: {product.rating}</p>
                         <p>Price: ${product.price}</p>
-                        <button onClick={(e) => handleCartButton(e, product)}>
+                        <button className="cartButton" onClick={(e) => handleCartButton(e, product)}>
                             {productIdInCart.some(item => item.id === product.id) ? "Added" : "Add to Cart"}
                         </button>
                     </div>

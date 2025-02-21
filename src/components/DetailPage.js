@@ -1,9 +1,11 @@
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import addToCartAction from "../actions/addToCartAction";
+import removeFromTheCart from "../actions/removeFromTheCart";
 import fetchingDataForDetailPage from "../asynchronousCalls/fetchingDataForDetailPage.js";
 
-const DetailPage = ({ products}) => {
+const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) => {
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const { id } = useParams();
@@ -26,6 +28,18 @@ const DetailPage = ({ products}) => {
 
         fetchDataAsync();
     }, [id, products]);
+
+
+    const handleCartButton = (e) => {
+        e.stopPropagation();
+        if (productIdInCart.some(item => item.id === id)) {
+            removeFromCart(id);
+        }
+        else {
+            addToCart(id);
+        }
+    };
+
 
     if (loading) {
         return <h1>Loading...</h1>;
@@ -58,6 +72,9 @@ const DetailPage = ({ products}) => {
                 <p><strong>Shipping:</strong> {successMessage?.shippingInformation}</p>
                 <p><strong>Return Policy:</strong> {successMessage?.returnPolicy}</p>
                 <p><strong>Minimum Order Quantity:</strong> {successMessage?.minimumOrderQuantity}</p>
+                <p><button className="cartButton" onClick={(e) => handleCartButton(e)}>
+                    {productIdInCart.some(item => item.id === id) ? "Added" : "Add to Cart"}
+                </button></p>
             </div>
 
             {/* Customer Reviews */}
@@ -84,8 +101,12 @@ const DetailPage = ({ products}) => {
 
 const mapStateToProps = (state) => ({
     products: state.homePageReducer.products,
+    productIdInCart: state.cartReducer,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+    addToCart: (productInformation) => dispatch(addToCartAction(productInformation)),
+    removeFromCart: (id) => dispatch(removeFromTheCart(id)),
+})
 
-
-export default connect(mapStateToProps)(DetailPage);
+export default connect(mapStateToProps, mapDispatchToProps)(DetailPage);
