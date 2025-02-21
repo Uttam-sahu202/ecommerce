@@ -1,44 +1,27 @@
 import { connect } from "react-redux";
-import addToCartAction from "../actions/addToCartAction.js";
+import incrementIdsQuantityInCartAction from "../actions/incrementIdsQuantityInCartAction.js";
+import decrementIdsQuantityInCartAction from "../actions/decrementIdsQuantityInCartAction.js";
 import removeFromTheCart from "../actions/removeFromTheCart.js";
 import { useState, useEffect } from "react";
 
-
-// task to do is 
-
-const CartPage = ({ product, addToCart, removeFromCart }) => {
+const CartPage = ({ removeFromCart, productIdAndQuantity, productIdAndProductMapping, increaseQuantity, decreaseQuantity }) => {
     const [totalPrice, setTotalPrice] = useState(0);
-    const [itemCounts, setItemCounts] = useState({});
 
-
-    useEffect(() => {             // re-render and re-initialising when the product array changes 
-        const initialCounts = {};
-        product.forEach((pro) => {
-            initialCounts[pro.id] = 1;
-        });
-        setItemCounts(initialCounts);
-    }, [product]);
-
-    
-    useEffect(() => {    // re - rendering when productarray or content inside the itemCounts change
-        const newTotalPrice = product.reduce((sum, pro) => {
-            return sum + (pro.price * itemCounts[pro.id]);
+    useEffect(() => {    
+        const newTotalPrice = productIdAndQuantity.reduce((sum, pro) => {
+            const product = productIdAndProductMapping[pro.id];  
+            return product ? sum + (product.price * pro.quantity) : sum;
         }, 0);
         setTotalPrice(newTotalPrice);
-    }, [itemCounts, product]);
+    }, [productIdAndQuantity, productIdAndProductMapping]);
 
     const incrementItem = (id) => {
-        setItemCounts((prevCounts) => ({
-            ...prevCounts,
-            [id]: (prevCounts[id] || 1) + 1,     // never let the count be zero 
-        }));
+        increaseQuantity(id);
     };
 
     const decrementItem = (id) => {
-        setItemCounts((prevCounts) => ({
-            ...prevCounts,
-            [id]: Math.max(prevCounts[id]  - 1, 1),
-        }));
+       // alert("dec button clicked ");
+        decreaseQuantity(id);
     };
 
     const handleRemoveClick = (e, id) => {
@@ -49,28 +32,31 @@ const CartPage = ({ product, addToCart, removeFromCart }) => {
     return (
         <div className="cart-body">
             <div className="itemSet">
-                {product.length > 0 ? (
-                    product.map((pro) => (
-                        <div key={pro.id} className="each-cart-product-container">
-                            <div className="cart-image-div">
-                                <img src={pro.thumbnail} alt={pro.title} className="cart-product-image" />
-                            </div>
-                            <div className="product-information">
-                                <h3>{pro.title}</h3>
-                                <p>Price: ${pro.price}</p>
-                            </div>
-                            <div className="cart-buttons">
-                                <div className="increment-decrement-button">
-                                    <button onClick={() => incrementItem(pro.id)}>+</button>
-                                    <span>{itemCounts[pro.id] || 1}</span>
-                                    <button onClick={() => decrementItem(pro.id)}>-</button>
+                {productIdAndQuantity.length > 0 ? (
+                    productIdAndQuantity.map((pro) => {
+                        const product = productIdAndProductMapping[pro.id];
+                        return product ? (
+                            <div key={pro.id} className="each-cart-product-container">
+                                <div className="cart-image-div">
+                                    <img src={product.thumbnail} alt={product.title} className="cart-product-image" />
                                 </div>
-                                <div className="remove-from-cart-button">
-                                    <button onClick={(e) => handleRemoveClick(e, pro.id)}>Remove</button>
+                                <div className="product-information">
+                                    <h3>{product.title}</h3>
+                                    <p>Price: ${product.price}</p>
+                                </div>
+                                <div className="cart-buttons">
+                                    <div className="increment-decrement-button">
+                                        <button onClick={() => incrementItem(pro.id)}>+</button>
+                                        <span>{pro.quantity}</span>
+                                        <button onClick={() => decrementItem(pro.id)}>-</button>
+                                    </div>
+                                    <div className="remove-from-cart-button">
+                                        <button onClick={(e) => handleRemoveClick(e, pro.id)}>Remove</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        ) : null;
+                    })
                 ) : (
                     <h2>Your cart is empty.</h2>
                 )}
@@ -83,12 +69,14 @@ const CartPage = ({ product, addToCart, removeFromCart }) => {
 };
 
 const mapStateToProps = (state) => ({
-    product: state.cartReducer,
+    productIdAndQuantity: state.cartReducer,  
+    productIdAndProductMapping: state.homePageReducer.products,  
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    addToCart: (productInformation) => dispatch(addToCartAction(productInformation)),
     removeFromCart: (id) => dispatch(removeFromTheCart(id)),
+    increaseQuantity: (id) => dispatch(incrementIdsQuantityInCartAction(id)),  
+    decreaseQuantity: (id) => dispatch(decrementIdsQuantityInCartAction(id)),  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartPage);

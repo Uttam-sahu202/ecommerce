@@ -56,9 +56,10 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
 
     const handleCartButton = (e, product) => {
         e.stopPropagation();
-        if (productIdInCart.includes(product.id)) {
+        if (productIdInCart.some(item => item.id === product.id)) {
             removeFromCart(product.id);
-        } else {
+        }
+         else {
             addToCart(product.id);
         }
     };
@@ -155,7 +156,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                         <p>Rating: {product.rating}</p>
                         <p>Price: ${product.price}</p>
                         <button onClick={(e) => handleCartButton(e, product)}>
-                            {productIdInCart.includes(product.id) ? "Added" : "Add to Cart"}
+                            {productIdInCart.some(item => item.id === product.id) ? "Added" : "Add to Cart"}
                         </button>
                     </div>
                 ))}
