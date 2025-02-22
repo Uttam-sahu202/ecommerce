@@ -28,14 +28,14 @@ const DefaultSearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCate
         try {
             const data = await fetchingDataForDefaultSearch();
             if(data)
-            setSuccessMessage(data.products);
+                setSuccessMessage(data.products);
             else alert("fetching issue");
         } catch (error) {
             setSuccessMessage([]);
         }
         setLoading(false);
     };
-
+    
     // Fetch categories
     const fetchCategories = async () => {
         try {
@@ -129,6 +129,7 @@ const DefaultSearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCate
                 handlingProductCardClick={handlingProductCardClick}
                 handleCartButton={handleCartButton}
                 productIdInCart={productIdInCart}
+                successMessage={successMessage}
             />
         </div>
     );

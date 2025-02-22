@@ -14,7 +14,7 @@ const SearchedProductsList = ({ successMessage = [], handlingProductCardClick, h
                     </div>
                 ))
             ) : (
-                <h2>No Products Found</h2>
+                <h2>search for categories </h2>
             )}
         </section>
     );
