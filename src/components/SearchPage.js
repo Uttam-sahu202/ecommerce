@@ -40,7 +40,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
 
     useEffect(() => {
         fetchDataAsync(searchedItem);
-    }, [searchedItem,currentPage,minPrice,maxPrice,rating]);
+    }, [searchedItem,minPrice,maxPrice,rating]);
 
     // from here fetching the categories in case of refrece the page 
 
@@ -63,6 +63,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
 
     
     const handleCategoryClick = (category) => {
+        setcurrentPage(1);
         navigate(`/search/${category}`);
     };
 
@@ -88,6 +89,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
             addToCart(product.id);
         }
     };
+
 
     const handlingProductCardClick = (e, productId) => {
         e.stopPropagation();
