@@ -1,43 +1,40 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import fetchAllCategories from "../asynchronousCalls/fetchAllCategories";
+import fetchingDataForDefaultSearch from "../asynchronousCalls/fetchingDataForDefaultSearch";
 import MinimumPrice from "./MinimumPrice.js";
 import MaximumPrice from "./MaximumPrice.js";
 import SearchCategory from "./SearchCategory.js";
-import FooterPagination from "./FooterPagination.js";
-import SearchedProductsList from "./SearchedProductsList.js"
+import SearchedProductsList from "./SearchedProductsList.js";
 import { connect } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
-import fetchingDataForSearchPage from "../asynchronousCalls/fetchingDataForSearchPage";
+import { useNavigate } from "react-router-dom";
 import addToCartAction from "../actions/addToCartAction";
 import removeFromTheCart from "../actions/removeFromTheCart";
 import addToProductsFromHomePageAction from "../actions/addToProductsFromHomePageAction.js";
 import "../SearchPage.css";
 
-const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories, addToProduct, productsInStore }) => {
-    const [currentPage, setcurrentPage] = useState(1);
+const DefaultSearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories, addToProduct, productsInStore }) => {
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [categories, setCategories] = useState(AllCategories);
+    const [categories, setCategories] = useState(AllCategories || []);
     const [input, setInput] = useState("");
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(10000000000);
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
-    const { searchedItem } = useParams();
 
-    const fetchDataAsync = async (category = searchedItem, page = 1) => {
+    // Fetch default search products
+    const fetchDataAsync = async () => {
         setLoading(true);
         try {
-            const data = await fetchingDataForSearchPage(category, page, minPrice, maxPrice, rating);
-            setSuccessMessage(data.products || []);
-            setTotal(data.total);
+            const data = await fetchingDataForDefaultSearch();
+            setSuccessMessage(Array.isArray(data.products) ? data.products : []);
         } catch (error) {
             setSuccessMessage([]);
         }
         setLoading(false);
     };
 
+    // Fetch categories
     const fetchCategories = async () => {
         try {
             const fetchedCategories = await fetchAllCategories();
@@ -48,11 +45,8 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
     };
 
     useEffect(() => {
-        fetchDataAsync(searchedItem);
-    }, [searchedItem]);
-
-    useEffect(() => {
-        if (!categories || categories.length === 0) {
+        fetchDataAsync();
+        if (!AllCategories || AllCategories.length === 0) {
             fetchCategories();
         }
     }, []);
@@ -61,25 +55,20 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
         navigate(`/search/${category}`);
     };
 
-
-    console.log(successMessage);
+    // Ensure products are added to store
     if (successMessage.length > 0) {
         successMessage.forEach(pro => {
-            if (!productsInStore[pro.id]) { // Check if product is already in store
-                addToProduct(pro); // Dispatch the action to add product
+            if (!productsInStore[pro.id]) {
+                addToProduct(pro);
             }
         });
     }
-
-
-
 
     const handleCartButton = (e, product) => {
         e.stopPropagation();
         if (productIdInCart.some(item => item.id === product.id)) {
             removeFromCart(product.id);
-        }
-        else {
+        } else {
             addToCart(product.id);
         }
     };
@@ -88,11 +77,6 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
         e.stopPropagation();
         navigate(`/detail/${productId}`);
     };
-
-
-
-
-
 
     if (loading) return <h2>Loading...</h2>;
     if (!successMessage.length) return <h1>No products found with the applied filters!</h1>;
@@ -126,7 +110,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                 <div className="category-buttons">
                     {categories?.length > 0 ? (
                         categories.map((category, index) => (
-                            <button key={index} onClick={() => handleCategoryClick(category)}>
+                            <button key={index} onClick={() => navigate(`/search/${category}`)}>
                                 {category}
                             </button>
                         ))
@@ -142,14 +126,6 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                 handleCartButton={handleCartButton}
                 productIdInCart={productIdInCart}
             />
-            <FooterPagination
-                currentPage={currentPage}
-                total={total}
-                fetchDataAsync={fetchDataAsync}
-                setcurrentPage={setcurrentPage}
-                searchedItem={searchedItem}
-            />
-
         </div>
     );
 };
@@ -166,4 +142,4 @@ const mapDispatchToProps = (dispatch) => ({
     addToProduct: (product) => dispatch(addToProductsFromHomePageAction(product))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);
+export default connect(mapStateToProps, mapDispatchToProps)(DefaultSearchPage);

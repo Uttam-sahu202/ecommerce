@@ -53,7 +53,7 @@ const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) =>
         <div className="detail-page-container">
             {/* Product Image */}
             <div className="selected-product-image">
-                <img src={successMessage?.thumbnail} alt={successMessage?.title} />
+                <img src={successMessage?.images[0]} alt={successMessage?.title} />
             </div>
 
             {/* Product Details */}

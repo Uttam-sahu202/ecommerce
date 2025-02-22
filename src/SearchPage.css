@@ -156,56 +156,18 @@ select {
 }
 
 .withButtons {
-    width: 100px;
     display: flex;
     align-items: center;
 }
-
-
-
-.footer-div {
-    width: 100px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    overflow-x: auto;
-    /* Enables horizontal scrolling */
-    scroll-behavior: smooth;
-    /* Smooth scrolling effect */
-    white-space: nowrap;
-    /* Ensures numbers remain in one line */
+.footer-div{
+    margin: 5px;
+    font-weight: bold;
+    font-size: medium;
 }
 
-.footer-div::-webkit-scrollbar {
-    display: none;
-    /* Hide scrollbar for Chrome, Safari, Edge */
-}
 
-/* Style for the page numbers */
-.pageNumber {
-    cursor: pointer;
-    color: rgb(34, 34, 235);
-}
 
-pageNumber:hover {
-    text-decoration: underline;
-    color: rgb(63, 63, 198);
-}
 
-.footer-div buttons {
-    position: absolute;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-}
 
-.footer-div button:hover {
-    background-color: #bbb;
-}
 
-.footer-div button:first-child {
-    left: -30px;
-}
+

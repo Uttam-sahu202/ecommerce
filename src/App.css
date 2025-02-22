@@ -64,80 +64,47 @@
 
 
 
-/* Detail Page Container */
 .detail-page-container {
   display: grid;
   grid-template-areas: 
     "selected-product-image detail-content"
     "reviews-section reviews-section";
-  grid-template-columns: 2fr 3fr; /* Adjust columns as needed */
+  grid-template-columns: 3fr 3fr; 
   grid-template-rows: auto auto;
   gap: 20px;
-  padding: 20px;
-}
-
-/* Selected Product Image */
-.selected-product-image {
-  grid-area: selected-product-image;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-width: 100%;
+  padding: 10px;
 }
 
 .selected-product-image img {
-  max-width: 100%;
-  max-height: 300px; 
+  width: 100%;
+  height: auto;
   object-fit: contain;
 }
 
-
-.detail-content {
-  grid-area: detail-content;
-}
-
 .detail-content h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
+  font-size: 1.8rem;
 }
 
 .detail-content p {
-  font-size: 1.1rem;
-  margin: 5px 0;
+  font-size: 1rem;
 }
-
-
-.reviews-section {
-  grid-area: reviews-section;
-  margin-top: 20px;
-}
-
 
 .reviews {
   display: flex;
   overflow-x: auto;
-  gap: 15px;
+  gap: 10px;
 }
 
 .review-card {
-  min-width: 250px;
-  padding: 15px;
-  border: 1px solid #ddd;
+  background-color: #ddd;
+  min-width: 220px;
+  padding: 12px;
   border-radius: 8px;
-  background-color: #f9f9f9;
 }
 
-.review-card p {
-  margin: 5px 0;
-}
 
-.review-card strong {
-  font-weight: bold;
-}
 
-.reviews-section h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
 
 
 /* cart css from here */
