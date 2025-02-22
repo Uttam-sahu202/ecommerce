@@ -1,7 +1,6 @@
-const MinimumPrice = ({ setMinPrice,optionsArray}) => {
-    
+const MinimumPrice = ({ setMinPrice, optionsArray, minPrice }) => {
     return (
-        <select onChange={(e) => setMinPrice(Number(e.target.value))}>
+        <select value={minPrice} onChange={(e) => setMinPrice(Number(e.target.value))}>
             {optionsArray.map((price, index) => (
                 <option key={index} value={price}>
                     {index === 0 ? "Min" : price}

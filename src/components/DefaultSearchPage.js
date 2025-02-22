@@ -27,7 +27,9 @@ const DefaultSearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCate
         setLoading(true);
         try {
             const data = await fetchingDataForDefaultSearch();
-            setSuccessMessage(Array.isArray(data.products) ? data.products : []);
+            if(data)
+            setSuccessMessage(data.products);
+            else alert("fetching issue");
         } catch (error) {
             setSuccessMessage([]);
         }
@@ -51,18 +53,20 @@ const DefaultSearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCate
         }
     }, []);
 
-    const handleCategoryClick = (category) => {
-        navigate(`/search/${category}`);
-    };
 
-    // Ensure products are added to store
-    if (successMessage.length > 0) {
+    useEffect(() => {
         successMessage.forEach(pro => {
             if (!productsInStore[pro.id]) {
                 addToProduct(pro);
             }
         });
-    }
+    }, [successMessage, addToProduct, productsInStore]);
+
+
+
+    const handleCategoryClick = (category) => {
+        navigate(`/search/${category}`);
+    };
 
     const handleCartButton = (e, product) => {
         e.stopPropagation();

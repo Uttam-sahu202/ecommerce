@@ -38,6 +38,12 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
         setLoading(false);
     };
 
+    useEffect(() => {
+        fetchDataAsync(searchedItem);
+    }, [searchedItem,currentPage,minPrice,maxPrice,rating]);
+
+    // from here fetching the categories in case of refrece the page 
+
     const fetchCategories = async () => {
         try {
             const fetchedCategories = await fetchAllCategories();
@@ -47,9 +53,6 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
         }
     };
 
-    useEffect(() => {
-        fetchDataAsync(searchedItem);
-    }, [searchedItem]);
 
     useEffect(() => {
         if (!categories || categories.length === 0) {
@@ -57,6 +60,8 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
         }
     }, []);
 
+
+    
     const handleCategoryClick = (category) => {
         navigate(`/search/${category}`);
     };
@@ -97,10 +102,6 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
     if (loading) return <h2>Loading...</h2>;
     if (!successMessage.length) return <h1>No products found with the applied filters!</h1>;
 
-    const filteredProducts = successMessage.filter(product =>
-        product.price >= minPrice && product.price <= maxPrice && product.rating >= rating
-    );
-
     return (
         <div className="wholePage">
             <section className="filterSection">
@@ -108,9 +109,9 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
                     <SearchCategory input={input} setInput={setInput} handleCategoryClick={handleCategoryClick} />
                     <div className="price-range">
                         <div className="min-price">{"Set Price "}
-                            {<MinimumPrice setMinPrice={setMinPrice} optionsArray={[0, 100, 200, 500, 1000, 5000, 10000]} />}
+                            {<MinimumPrice setMinPrice={setMinPrice}  minPrice ={minPrice} optionsArray={[0, 100, 200, 500, 1000, 5000, 10000]} />}
                             <span> to </span>
-                            {<MaximumPrice setMaxPrice={setMaxPrice} optionsArray={[1000000000, 1000, 2000, 5000, 50000, 100000]} />}
+                            {<MaximumPrice setMaxPrice={setMaxPrice} maxPrice ={maxPrice} optionsArray={[1000000000, 1000, 2000, 5000, 50000, 100000]} />}
                         </div>
                     </div>
                     <div className="rating-range">Set Rating
@@ -137,7 +138,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
             </section>
 
             <SearchedProductsList
-                filteredProducts={filteredProducts}
+                successMessage={successMessage}
                 handlingProductCardClick={handlingProductCardClick}
                 handleCartButton={handleCartButton}
                 productIdInCart={productIdInCart}

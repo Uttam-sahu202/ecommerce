@@ -1,7 +1,6 @@
-const MaximumPrice = ({optionsArray,setMaxPrice }) => {
-    
+const MaximumPrice = ({ optionsArray, setMaxPrice, maxPrice }) => {
     return (
-        <select onChange={(e) => setMaxPrice(Number(e.target.value))}>
+        <select value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))}>
             {optionsArray.map((price, index) => (
                 <option key={index} value={price}>
                     {index === 0 ? "Max" : price}
