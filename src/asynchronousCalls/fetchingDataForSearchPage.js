@@ -1,6 +1,12 @@
 async function fetchingDataForSearchPage(searchedItem, page = 1, minPrice = 0, maxPrice = 10000000, rating = 0) {
     try {
-        const url = `http://localhost:3005/products?page=${page}&minPrice=${minPrice}&maxPrice=${maxPrice}&rating=${rating}&category=${searchedItem}`;
+        let url;
+        if (typeof searchedItem === "undefined") {
+            url = `http://localhost:3005/products?page=${page}&minPrice=${minPrice}&maxPrice=${maxPrice}&rating=${rating}`;
+        } else {
+            url = `http://localhost:3005/products?page=${page}&minPrice=${minPrice}&maxPrice=${maxPrice}&rating=${rating}&category=${searchedItem}`;
+        }
+        
         const response = await fetch(url);
 
         if (!response.ok) {

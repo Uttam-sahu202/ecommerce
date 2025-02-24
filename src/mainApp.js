@@ -2,7 +2,6 @@ import DetailPage from "./components/DetailPage";
 import HomePage from './components/HomePage';
 import SearchPage from './components/SearchPage';
 import CartPage from "./components/CartPage.js"
-import DefaultSearchPage from "./components/DefaultSearchPage"
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -33,8 +32,7 @@ const MainApp = ({ numberOfItemInCart }) => {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/search" element={<DefaultSearchPage />} />
-        <Route path="/search/:searchedItem" element={<SearchPage />} />
+        <Route path="/search/:searchedItem?" element={<SearchPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>

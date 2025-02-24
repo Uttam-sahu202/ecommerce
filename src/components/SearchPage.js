@@ -26,6 +26,7 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
     const navigate = useNavigate();
     const { searchedItem } = useParams();
 
+
     const fetchDataAsync = async (category = searchedItem, page = 1) => {
         setLoading(true);
         try {
