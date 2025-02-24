@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import MultipleImages from "./MultipleImages"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import addToCartAction from "../actions/addToCartAction";
@@ -8,6 +9,7 @@ import fetchingDataForDetailPage from "../asynchronousCalls/fetchingDataForDetai
 const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) => {
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const [imageArrayIndex, setImageArrayIndex] = useState(0);
     const { id } = useParams();
 
     useEffect(() => {
@@ -53,7 +55,10 @@ const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) =>
         <div className="detail-page-container">
             {/* Product Image */}
             <div className="selected-product-image">
-                <img src={successMessage?.images[0]} alt={successMessage?.title} />
+                <img src={successMessage?.images[imageArrayIndex]} alt={successMessage?.title} />
+
+                <MultipleImages images={successMessage.images} setImageArrayIndex={setImageArrayIndex} />
+
             </div>
 
             {/* Product Details */}
