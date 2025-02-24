@@ -25,22 +25,22 @@ const fetchingDataForHomePage = () => {
                 })
             );
 
-            const validCategoryData = categoryDataList.filter(data => data !== null);
+            const validCategoryData = categoryDataList.filter(data => data !== null);  // array of object each index will contain {total:,page:,limit:,products:[]}
 
             if (validCategoryData.length === 0) {
                 dispatch(successAction("Failed to fetch category data."));
                 return;
             }
-            
-            let ProductsMapingWithIds = validCategoryData.reduce((acc, curr) => {
-                curr.products.forEach(product => {
+
+            let ProductsMapingWithIds = validCategoryData.reduce((acc, curr) => { // making key value pair, key as product id and value as product array
+                curr.products.forEach(product => {    // curr ka products is a array of 4 products
                     acc[product.id] = product; 
                 });
                 return acc;
             }, {});
             
 
-            dispatch(successAction({
+            dispatch(successAction({             // now dispatching the normalise form of the data into the redux store 
                 AllCategories: categories,
                 products : ProductsMapingWithIds,
             }));

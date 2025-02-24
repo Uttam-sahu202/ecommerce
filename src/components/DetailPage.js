@@ -14,7 +14,7 @@ const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) =>
 
     useEffect(() => {
         const fetchDataAsync = async () => {
-            if (products[id] === undefined) {
+            if (products[id] === undefined) {  // if products of this id is not availabel in product array fetch it else
                 setLoading(true);
                 try {
                     const data = await fetchingDataForDetailPage(id);

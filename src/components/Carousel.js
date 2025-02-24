@@ -19,7 +19,7 @@ const Carousel = ({ products, navigate }) => {
     return (
         <div className="carousel-container">
             <button className="scroll-btn left" onClick={handleScrollLeft}>&#10094;</button>
-            <div className="product-slider" ref={sliderRef}>
+            <div className="product-slider" ref={sliderRef}>                                   {/* strong the refrence of each category div so that i can apply a scrollBy on it  */}
                 {products.slice(0, 4).map((product) => (
                     <ProductCard key={product.id} product={product} navigate={navigate} />
                 ))}
