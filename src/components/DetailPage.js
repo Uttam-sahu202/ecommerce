@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import addToCartAction from "../actions/addToCartAction";
 import removeFromTheCart from "../actions/removeFromTheCart";
 import fetchingDataForDetailPage from "../asynchronousCalls/fetchingDataForDetailPage.js";
+import addToProductsFromHomePageAction from "../actions/addToProductsFromHomePageAction";
 
-const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) => {
+const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart, addItToStore }) => {
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [imageArrayIndex, setImageArrayIndex] = useState(0);
@@ -19,6 +20,7 @@ const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) =>
                 try {
                     const data = await fetchingDataForDetailPage(id);
                     setSuccessMessage(data);
+                    addItToStore(data);
                 } catch (error) {
                     setSuccessMessage("Can't get the data for product");
                 }
@@ -30,7 +32,6 @@ const DetailPage = ({ removeFromCart, addToCart, products, productIdInCart }) =>
 
         fetchDataAsync();
     }, [id, products]);
-
 
     const handleCartButton = (e) => {
         e.stopPropagation();
@@ -112,6 +113,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     addToCart: (productInformation) => dispatch(addToCartAction(productInformation)),
     removeFromCart: (id) => dispatch(removeFromTheCart(id)),
+    addItToStore : (data) =>dispatch(addToProductsFromHomePageAction(data)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailPage);

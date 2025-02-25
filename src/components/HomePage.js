@@ -53,4 +53,4 @@ const mapDispatchToProps = (dispatch) => ({               // is a function that 
     fetchData: () => dispatch(fetchingDataForHomePage()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage); // connect is a HOC use to inject redux state and dispatch in component
