@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <BrowserRouter> 
+    <BrowserRouter>        {/*  <Router history={customHistory}>  BrowserRouter will manage history outomatically  */}
       <MainApp />
     </BrowserRouter>
   );

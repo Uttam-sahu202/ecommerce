@@ -7,7 +7,6 @@
 
 .searchForCategories {
     flex: 2;
-    /* Takes more space */
     display: flex;
     align-items: center;
     gap: 4px;
@@ -15,7 +14,6 @@
 
 .searchForCategories input {
     width: 100%;
-    /* Full width */
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;

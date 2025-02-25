@@ -26,7 +26,6 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
     const navigate = useNavigate();
     const { searchedItem } = useParams();
 
-
     const fetchDataAsync = async (category = searchedItem, page = 1) => {
         setLoading(true);
         try {
@@ -69,7 +68,6 @@ const SearchPage = ({ removeFromCart, addToCart, productIdInCart, AllCategories,
     };
 
 
-    console.log(successMessage);
     if (successMessage.length > 0) {
         successMessage.forEach(pro => {
             if (!productsInStore[pro.id]) { // Check if product is already in store
