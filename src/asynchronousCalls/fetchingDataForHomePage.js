@@ -32,7 +32,7 @@ const fetchingDataForHomePage = () => {
                 return;
             }
 
-            let ProductsMapingWithIds = validCategoryData.reduce((acc, curr) => { // making key value pair, key as product id and value as product array
+            let ProductsMapingWithIds = validCategoryData.reduce((acc, curr) => { // making key value pair, key as product id and value as product 
                 curr.products.forEach(product => {    // curr ka products is a array of 4 products
                     acc[product.id] = product; 
                 });
